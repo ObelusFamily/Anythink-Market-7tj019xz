@@ -88,7 +88,7 @@ router.get("/", auth.optional, function(req, res, next) {
         var user = results[2];
         return res.json({
           items: await Promise.all(
-            items.map(async function(item) {
+            items.map(async function() {
               item.seller = await User.findById(item.seller);
               return item.toJSONFor(user);
             })

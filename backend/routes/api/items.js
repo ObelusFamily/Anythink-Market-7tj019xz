@@ -52,9 +52,6 @@ router.get("/", auth.optional, function(req, res, next) {
   if (typeof req.query.tag !== "undefined") {
     query.tagList = { $in: [req.query.tag] };
   }
-  if(typeof req.query.title !== "undefined"){
-    query.title = req.query.title
-  }
 
   Promise.all([
     req.query.seller ? User.findOne({ username: req.query.seller }) : null,
@@ -111,9 +108,6 @@ router.get("/feed", auth.required, function(req, res, next) {
   if (typeof req.query.offset !== "undefined") {
     offset = req.query.offset;
   }
-  if(typeof req.query.title !== "undefined"){
-    query.title = req.query.title
-  }
 
   User.findById(req.payload.id).then(function(user) {
     if (!user) {
@@ -154,7 +148,7 @@ router.post("/", auth.required, function(req, res, next) {
 
       item.seller = user;
 
-      return item.save().then(function(item) {
+      return item.save().then(function() {
         sendEvent('item_created', { item: req.body.item })
         return res.json({ item: item.toJSONFor(user) });
       });
